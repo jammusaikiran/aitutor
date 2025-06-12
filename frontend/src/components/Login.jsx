@@ -27,7 +27,7 @@ function Login(){
     // 🔔 Notify Navbar to update login state
     window.dispatchEvent(new Event('authChange'))
 
-    if(res.data.role==='admin') navigate('/admin')
+    if(res.data.role==='admin') navigate('/')
     else navigate('/')
   }catch(err){
     alert('Login failed')
