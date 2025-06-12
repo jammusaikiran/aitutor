@@ -1,0 +1,54 @@
+.home-hero {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+  text-align: center;
+  animation: fadeIn 1.2s ease-in;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+
+.hero-content {
+  max-width: 600px;
+  padding: 20px;
+}
+
+.hero-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #007bff;
+  animation: slideDown 1s ease-out;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: #333;
+  margin-top: 10px;
+  animation: fadeIn 2s ease-in;
+}
+
+.hero-tip {
+  margin-top: 20px;
+  font-style: italic;
+  color: #555;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
