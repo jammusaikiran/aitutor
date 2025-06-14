@@ -13,7 +13,7 @@ const ChatPage = () => {
 
   const fetchHistory=async()=>{
     try {
-      const res=await axios.get(`${BASE_URL}/api/chat/history`, {
+      const res=await axios.get(`/api/chat/history`, {
         headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}
       })
       if(Array.isArray(res.data)) setChats(res.data.reverse())
@@ -30,7 +30,7 @@ const ChatPage = () => {
     setLoading(true)
 
     try {
-      const res=await axios.post(`${BASE_URL}/api/chat`, {question}, {
+      const res=await axios.post(`/api/chat`, {question}, {
         headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}
       })
       setChats(prev=>[...prev.slice(0,-1), res.data])

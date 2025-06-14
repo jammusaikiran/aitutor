@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import API from '../services/api'
+import axios from 'axios'
 import './Register.css'
 
 function Register(){
@@ -15,7 +16,7 @@ function Register(){
     setMessage('')
     
     try{
-      await API.post('/auth/register',{name,email,password})
+      await axios.post('/api/auth/register',{name,email,password})
       setMessage('Registration successful! You can now login.')
       setMessageType('success')
       // Clear form

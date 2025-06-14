@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import API from '../services/api'
+// import API from '../services/api'
+import axios from 'axios'
 import './Login.css'
 
 function Login(){
@@ -12,7 +13,7 @@ function Login(){
   const handleLogin=async()=>{
   setLoading(true)
   try{
-    const res=await API.post('/auth/login',{email,password})
+    const res=await axios.post('/api/auth/login',{email,password})
     localStorage.setItem('token',res.data.token)
     
     // Store user info for navbar

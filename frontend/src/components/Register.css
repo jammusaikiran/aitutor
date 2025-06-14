@@ -7,20 +7,25 @@
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
+  overflow-y: auto; /* allow page scroll if needed */
 }
+
 
 /* Register Form Card */
 .register-form {
   background: white;
-  padding: 40px;
+  padding: 30px;
   border-radius: 12px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 420px;
+  height: 500px; /* reduced height */
   text-align: center;
   position: relative;
   overflow: hidden;
 }
+
+
 
 .register-form::before {
   content: '';

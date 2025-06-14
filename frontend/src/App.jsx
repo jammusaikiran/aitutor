@@ -6,6 +6,7 @@ import ChatPage from './components/ChatPage'
 import AdminDashboard from './components/AdminDashboard'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
+import DSCChatBot from './components/DSCChatBot'
 import './App.css'
 
 function App(){
@@ -15,6 +16,7 @@ function App(){
        <div className="app-container">
         <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/dsc-chat" element={<DSCChatBot />} />
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} />
         <Route path="/user" element={<Dashboard role="User" />} />
