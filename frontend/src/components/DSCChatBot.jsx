@@ -48,7 +48,7 @@ function DSCChatBot(){
     setSuccess('')
 
     try{
-      await axios.post('http://localhost:5001/train',formData)
+      await axios.post('https://aitutor-v49z.onrender.com/train',formData)
       setSuccess('PDF uploaded and trained!')
       setFile(null)
       if(fileInputRef.current) fileInputRef.current.value=null
@@ -69,7 +69,7 @@ function DSCChatBot(){
     setLoading(true)
     setError('')
     try{
-      const res=await axios.post('http://localhost:5001/query',{
+      const res=await axios.post('https://aitutor-v49z.onrender.com/query',{
         question,
         user_id:userId
       })
