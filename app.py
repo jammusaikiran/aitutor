@@ -24,7 +24,9 @@ CORS(app)
 
 # Per-user in-memory stores
 user_indices = {}  # user_id -> {'index': faiss_index, 'embeddings': np.array, 'meta': list[dict], 'dim': int}
-model = SentenceTransformer("all-MiniLM-L6-v2")
+# model = SentenceTransformer("all-MiniLM-L6-v2")
+model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
+
 
 # Config
 UPLOAD_FOLDER = "uploaded_docs"
