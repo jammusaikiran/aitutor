@@ -137,23 +137,23 @@ RAG_PROVIDER = os.getenv("RAG_PROVIDER", "openai").lower()
 USE_OPENAI = RAG_PROVIDER == "openai"
 USE_GEMINI = RAG_PROVIDER == "gemini"
 
-openai_client = None
-gemini_model = None
+# openai_client = None
+# gemini_model = None
 
-if USE_OPENAI:
-    try:
-        from openai import OpenAI
-        openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    except Exception as _:
-        openai_client = None
+# if USE_OPENAI:
+#     try:
+#         from openai import OpenAI
+#         openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+#     except Exception as _:
+#         openai_client = None
 
-if USE_GEMINI:
-    try:
-        import google.generativeai as genai
-        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-        gemini_model = genai.GenerativeModel("gemini-1.5-pro")
-    except Exception as _:
-        gemini_model = None
+# if USE_GEMINI:
+#     try:
+#         import google.generativeai as genai
+#         genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+#         gemini_model = genai.GenerativeModel("gemini-1.5-pro")
+#     except Exception as _:
+#         gemini_model = None
 
 app = Flask(__name__)
 CORS(app)
@@ -326,22 +326,22 @@ Answer:"""
 def generate_answer(question: str, contexts: list[dict]) -> str:
     prompt = make_prompt(question, contexts)
 
-    if USE_OPENAI and openai_client is not None:
-        # Uses Responses API (o4-mini is capable/cost-effective; switch if desired)
-        resp = openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a precise assistant for question answering with citations."},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.2,
-            max_tokens=500,
-        )
-        return resp.choices[0].message.content.strip()
+    # if USE_OPENAI and openai_client is not None:
+    #     # Uses Responses API (o4-mini is capable/cost-effective; switch if desired)
+    #     resp = openai_client.chat.completions.create(
+    #         model="gpt-4o-mini",
+    #         messages=[
+    #             {"role": "system", "content": "You are a precise assistant for question answering with citations."},
+    #             {"role": "user", "content": prompt},
+    #         ],
+    #         temperature=0.2,
+    #         max_tokens=500,
+    #     )
+    #     return resp.choices[0].message.content.strip()
 
-    if USE_GEMINI and gemini_model is not None:
-        resp = gemini_model.generate_content(prompt)
-        return (resp.text or "").strip()
+    # if USE_GEMINI and gemini_model is not None:
+    #     resp = gemini_model.generate_content(prompt)
+    #     return (resp.text or "").strip()
 
     # Fallback: extractive (concatenate contexts)
     merged = " ".join(c["chunk"] for c in contexts)
