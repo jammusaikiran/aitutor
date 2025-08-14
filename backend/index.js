@@ -12,6 +12,7 @@ app.use(express.json())
 const chatRoutes=require('./routes/chat')
 app.use('/api/chat',chatRoutes)
 
+
 const authRoutes=require('./routes/authRoutes')
 app.use('/api/auth',authRoutes)
 

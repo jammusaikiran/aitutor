@@ -29,10 +29,15 @@ const ChatPage = () => {
     setChats(prev=>[...prev,tempChat])
     setLoading(true)
 
+    
+
     try {
+      // console.log("********************************")
+      console.log(localStorage.getItem('token'))
       const res=await axios.post(`/api/chat`, {question}, {
         headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}
       })
+      console.log("********************************")
       setChats(prev=>[...prev.slice(0,-1), res.data])
       setQuestion('')
     } catch (err) {
