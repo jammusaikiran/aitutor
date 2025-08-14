@@ -13,6 +13,10 @@ const chatRoutes=require('./routes/chat')
 app.use('/api/chat',chatRoutes)
 
 
+app.get("/welcome",(req,res)=>{
+    res.send("welcome")
+})
+
 const authRoutes=require('./routes/authRoutes')
 app.use('/api/auth',authRoutes)
 
