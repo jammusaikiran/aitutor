@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const token = localStorage.getItem('token')
 
   useEffect(() => {
-    axios.get('/api/admin/users', {
+    axios.get(import.meta.env.VITE_API_URL+'/api/admin/users', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setUsers(res.data))
   }, [])
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
     setLoadingChats(true)
     setChatHistory([])
 
-    axios.get(`/api/admin/chats/${userId}`, {
+    axios.get(import.meta.env.VITE_API_URL+`/api/admin/chats/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setChatHistory(res.data)
@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   const deleteUser = (userId) => {
     if (!window.confirm('Are you sure you want to delete this user and all their chats?')) return
 
-    axios.delete(`/api/admin/user/${userId}`, {
+    axios.delete(import.meta.env.VITE_API_URL+`/api/admin/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => {
       setUsers(users.filter(u => u._id !== userId))
