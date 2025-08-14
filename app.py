@@ -305,8 +305,9 @@ def query():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/")
+@app.route("/home")
 def health():
+    print("hello")
     return jsonify({"status": "ok", "rag_provider": RAG_PROVIDER})
 
 
