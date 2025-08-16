@@ -217,7 +217,7 @@ const handleDeleteChat = async (chatId) => {
 
 
   return (
-    <Box display="flex" height="100vh" sx={{ fontFamily: "Arial, sans-serif" }} overflow="hidden">
+    <Box display="flex" height="100vh" sx={{ fontFamily: "Arial, sans-serif" }} overflow="hidden" marginTop="60px" position="fixed">
       {/* Sidebar */}
       <Paper sx={{ width: 300, overflowY: "auto", p: 2, bgcolor: "#f0f2f5" }}>
         <Typography variant="h6">Chats</Typography>
@@ -257,9 +257,12 @@ const handleDeleteChat = async (chatId) => {
             display: "flex",
             flexDirection: "column",
             bgcolor: "#e5ddd5",
-            minWidth: "150vh",
+            minWidth: "130vh",
             maxHeight: "70vh",
+            width: "100%",
+            height: "100%",
           }}
+
         >
           {newChatMode ? (
             <Box textAlign="center" mt="auto" mb="auto">

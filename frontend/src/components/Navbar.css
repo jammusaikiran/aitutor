@@ -1,5 +1,5 @@
 /* Navbar Container */
-.navbar {
+/* .navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,7 +14,22 @@
   display: flex;
   align-items: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} */
+ .navbar {
+  position: fixed;   /* ✅ Sticks to top */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;      /* same height you want */
+  background-color: white;
+  z-index: 1000;     /* stays above other components */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 
 /* Navbar Inner Container */
 .navbar-container {

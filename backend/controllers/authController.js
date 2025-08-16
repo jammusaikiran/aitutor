@@ -27,6 +27,9 @@ exports.login = async (req, res) => {
 
     const valid = await bcrypt.compare(password, user.password)
     if (!valid) return res.status(401).send('Invalid password')
+    
+    user.lastActive = new Date();
+    await user.save();
 
     const token = jwt.sign(
       {

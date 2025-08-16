@@ -69,7 +69,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
-          <h2>ChatBot App</h2>
+          <h2>SMART LEARNING</h2>
         </Link>
 
         <div className="hamburger" onClick={()=>setIsMobileMenuOpen(!isMobileMenuOpen)}>

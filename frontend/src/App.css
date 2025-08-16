@@ -9,12 +9,16 @@ body, html, #root {
   overflow-y: auto; /* ✅ Enable vertical scrolling */
 }
 
-
-/* Optional container for routing pages */
+/* Container for routed pages (below Navbar) */
+/* Push content down below fixed navbar */
 .app-container {
   min-height: 100vh;
-  padding-top: 70px; /* Leave space for navbar */
+  padding-top: 70px;  /* 👈 must match navbar height */
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  margin:100px;
 }
+
