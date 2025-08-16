@@ -1,12 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.css'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // Check login status
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  } 
+
+  useEffect(() => {
+    checkAuthStatus()
+
+    // Optional: listen to login/logout changes
+    const handleAuthChange = () => checkAuthStatus()
+    window.addEventListener('storage', handleAuthChange)
+    window.addEventListener('authChange', handleAuthChange)
+
+    return () => {
+      window.removeEventListener('storage', handleAuthChange)
+      window.removeEventListener('authChange', handleAuthChange)
+    }
+  }, [])
+
   const goToDSCBot = () => {
-    navigate('/dsc-chat')
+    if (!isLoggedIn) {
+      alert('Please login first to access the DSC ChatBot')
+      navigate('/login')
+    } else {
+      navigate('/dsc-chat')
+    }
   }
+
   return (
     <div className="home-hero">
       <div className="hero-content">

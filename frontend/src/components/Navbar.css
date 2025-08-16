@@ -1,36 +1,26 @@
+/* Navbar Container */
 .navbar {
-  position: fixed;           /* Stick to the top */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;               /* Full width */
+  width: 100%;
   height: 60px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   z-index: 9999;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.admin-btn {
-  margin-left: 10px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.admin-btn:hover {
-  background-color: #1a242f;
-}
-
+/* Navbar Inner Container */
 .navbar-container {
   max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
+  margin-bottom: 0px auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,80 +28,113 @@
   box-sizing: border-box;
 }
 
+/* Brand */
 .navbar-brand h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
-  color: #333;
+  color: #007bff;
+  letter-spacing: -0.5px;
+  transition: color 0.3s ease;
 }
 
+.navbar-brand h2:hover {
+  color: #0056b3;
+}
+
+/* Hamburger Icon (Mobile) */
 .hamburger {
   display: none;
-  font-size: 26px;
+  font-size: 28px;
   cursor: pointer;
-  color: #333;
+  color: #007bff;
 }
 
+/* Navbar Menu */
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
+/* Buttons */
 .chatbot-btn,
-.logout-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
+.logout-btn,
+.admin-btn {
   display: flex;
   align-items: center;
-  transition: background-color 0.3s ease;
+  gap: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.chatbot-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
 }
 
 .logout-btn {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #dc3545, #a71d2a);
+  color: white;
+}
+
+.admin-btn {
+  background: linear-gradient(135deg, #2c3e50, #1a242f);
+  color: white;
 }
 
 .chatbot-btn:hover,
-.logout-btn:hover {
-  opacity: 0.9;
+.logout-btn:hover,
+.admin-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 123, 255, 0.25);
+  opacity: 0.95;
 }
 
-.btn-icon {
-  margin-right: 6px;
-}
-
+/* Profile Display */
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 5px 10px;
-  border-radius: 20px;
-  background-color: #f1f1f1;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: rgba(0,0,0,0.05);
+  transition: background 0.3s ease;
+}
+
+.user-profile:hover {
+  background: rgba(0,123,255,0.1);
 }
 
 .profile-icon {
-  background-color: #007bff;
+  background: #007bff;
   color: white;
   width: 32px;
   height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   font-weight: bold;
+  font-size: 0.85rem;
 }
 
 .user-name {
   font-weight: 500;
-  color: #333;
+  color: #007bff;
 }
 
-/* Mobile styles */
+/* Button Icons */
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .hamburger {
     display: block;
@@ -121,12 +144,15 @@
     display: none;
     flex-direction: column;
     width: 100%;
-    padding: 10px 0;
-    background-color: #fff;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
     position: absolute;
     top: 60px;
     left: 0;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    gap: 10px;
+    z-index: 999;
   }
 
   .navbar-menu.active {
@@ -134,13 +160,25 @@
   }
 
   .chatbot-btn,
-  .logout-btn {
-    width: 100%;
+  .logout-btn,
+  .admin-btn {
+    width: 90%;
     justify-content: center;
+    margin: 0 auto;
   }
 
   .user-profile {
     justify-content: center;
     width: 100%;
   }
+}
+
+/* Smooth entry animation */
+.navbar {
+  animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px);}
+  to { opacity: 1; transform: translateY(0);}
 }

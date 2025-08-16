@@ -1,47 +1,43 @@
-/* Login Container */
+/* Container */
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f0f8ff, #e6f7ff, #d0eaff);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
 }
 
-/* Login Form Card */
+/* Glassmorphism Card */
 .login-form {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
   width: 100%;
   max-width: 400px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideUp 0.6s ease-out;
 }
 
-.login-form::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+.login-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 123, 255, 0.2);
 }
 
-/* Header */
+/* Heading */
 .login-form h2 {
-  color: #2c3e50;
-  margin-bottom: 30px;
-  font-size: 2.2em;
-  font-weight: 300;
-  letter-spacing: -0.5px;
+  color: #007bff;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  animation: fadeIn 1.2s ease-in;
 }
 
-/* Input Fields */
+/* Inputs */
 .login-form input {
   width: 100%;
   padding: 15px 20px;
@@ -51,188 +47,81 @@
   font-size: 16px;
   transition: all 0.3s ease;
   background-color: #f8f9fa;
+  color: #000;          /* Ensure text is black */
   box-sizing: border-box;
 }
 
 .login-form input:focus {
   outline: none;
   border-color: #667eea;
-  background-color: white;
+  background-color: #fff; /* Solid white background */
+  color: #000;             /* Text stays visible */
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
 }
 
 .login-form input::placeholder {
-  color: #7f8c8d;
+  color: #7f8c8d; /* Lighter gray for placeholder */
   font-weight: 400;
 }
 
-/* Login Button */
+
+/* Buttons */
 .login-form button {
   width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 14px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 30px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
-  position: relative;
-  overflow: hidden;
 }
 
 .login-form button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #0056b3, #003d80);
+  transform: scale(1.05);
 }
 
-.login-form button:active {
-  transform: translateY(0);
-}
-
-.login-form button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.login-form button:hover::before {
-  left: 100%;
-}
-
-/* Loading State */
 .login-form button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
 
-.login-form button:disabled:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-/* Error Message Styles */
-.error-message {
-  background-color: #fee;
-  color: #e74c3c;
+/* Register Button */
+.register-btn {
+  margin-top: 12px;
   padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  border: 1px solid #fcc;
-  font-size: 14px;
-  animation: shake 0.5s ease-in-out;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+.register-btn:hover {
+  background: linear-gradient(135deg, #1e7e34, #155d27);
+  transform: scale(1.05);
 }
 
-/* Success Message */
-.success-message {
-  background-color: #efe;
-  color: #27ae60;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  border: 1px solid #cfc;
-  font-size: 14px;
-}
-
-/* Additional Links Section */
+/* Links Section */
 .login-links {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #e1e8ed;
-}
-
-.login-links a {
-  color: #667eea;
-  text-decoration: none;
+  margin-top: 20px;
   font-size: 14px;
-  transition: color 0.3s ease;
+  color: #555;
 }
 
-.login-links a:hover {
-  color: #764ba2;
-  text-decoration: underline;
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-  .login-container {
-    padding: 15px;
-  }
-  
-  .login-form {
-    padding: 30px 25px;
-  }
-  
-  .login-form h2 {
-    font-size: 1.8em;
-    margin-bottom: 25px;
-  }
-  
-  .login-form input {
-    padding: 12px 15px;
-    font-size: 15px;
-  }
-  
-  .login-form button {
-    padding: 12px;
-    font-size: 15px;
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .login-container {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  }
-  
-  .login-form {
-    background: #2c3e50;
-    color: white;
-  }
-  
-  .login-form h2 {
-    color: white;
-  }
-  
-  .login-form input {
-    background-color: #34495e;
-    border-color: #4a6741;
-    color: white;
-  }
-  
-  .login-form input::placeholder {
-    color: #bdc3c7;
-  }
-  
-  .login-form input:focus {
-    background-color: #3d566e;
-    border-color: #667eea;
-  }
-  
-  .login-links {
-    border-top-color: #4a6741;
-  }
-}
-
-/* Animation for form entrance */
-.login-form {
-  animation: slideUp 0.6s ease-out;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }
 
 @keyframes slideUp {
@@ -243,5 +132,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 30px 20px;
+  }
+  .login-form h2 {
+    font-size: 1.6rem;
   }
 }

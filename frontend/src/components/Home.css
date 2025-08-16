@@ -4,37 +4,66 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+  background: linear-gradient(135deg, #f0f8ff, #e6f7ff, #d0eaff);
   text-align: center;
   animation: fadeIn 1.2s ease-in;
   padding: 2rem;
   box-sizing: border-box;
 }
 
-
 .hero-content {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
   max-width: 600px;
-  padding: 20px;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 123, 255, 0.2);
 }
 
 .hero-title {
-  font-size: 36px;
+  font-size: 42px;
   font-weight: bold;
   color: #007bff;
+  margin-bottom: 15px;
   animation: slideDown 1s ease-out;
 }
 
 .hero-subtitle {
   font-size: 18px;
   color: #333;
-  margin-top: 10px;
+  margin-bottom: 20px;
   animation: fadeIn 2s ease-in;
+  line-height: 1.6;
 }
 
 .hero-tip {
   margin-top: 20px;
   font-style: italic;
   color: #555;
+  font-size: 14px;
+}
+
+button {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #0056b3, #003d80);
+  transform: scale(1.05);
 }
 
 @keyframes fadeIn {
@@ -50,5 +79,20 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 30px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
   }
 }

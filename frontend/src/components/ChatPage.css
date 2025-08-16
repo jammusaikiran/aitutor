@@ -1,300 +1,162 @@
+/* === Overall Chat Container === */
 .chat-container {
-  height: calc(100vh - 70px); /* subtract actual navbar height */
-  margin-top: 70px; /* match your navbar height */
+  height: calc(100vh - 70px);
+  margin-top: 70px;
   display: flex;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #f9fafb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-
+/* === Header === */
 .chat-container h2 {
   text-align: center;
+  background: linear-gradient(90deg, #4f46e5, #9333ea);
   color: white;
-  margin-bottom: 30px;
-  font-size: 2.5rem;
+  margin: 0;
+  padding: 20px;
+  font-size: 1.8rem;
   font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   letter-spacing: -0.5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* === Chat Box === */
 .chat-box {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
 }
 
 .chat-box::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-box::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
+  width: 6px;
 }
 
 .chat-box::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
 }
 
-.chat-box::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #5a67d8, #6b46c1);
-}
-
-.chat-box ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
+/* === Messages === */
 .chat-message {
-  margin-bottom: 20px;
-  animation: fadeInUp 0.5s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .user-msg, .bot-msg {
-  margin-bottom: 10px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  position: relative;
-  max-width: 70%;
-  word-wrap: break-word;
-  font-size: 0.9rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 75%;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .user-msg {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  align-self: flex-end;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
-  margin-left: auto;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.25);
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
 }
 
 .bot-msg {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  color: #333;
-  margin-right: auto;
-  border-bottom-left-radius: 5px;
-  box-shadow: 0 4px 12px rgba(250, 112, 154, 0.25);
+  align-self: flex-start;
+  background: #f3f4f6;
+  color: #111827;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
+/* === Message Meta === */
 .sender {
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: inline-block;
+  display: block;
+  font-weight: 600;
+  font-size: 0.8rem;
   margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bot-msg .sender {
+  color: #4b5563;
 }
 
 .time {
   font-size: 0.7rem;
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.75);
   float: right;
-  font-weight: 400;
 }
 
-.user-msg p, .bot-msg p {
-  margin: 6px 0 0 0;
-  line-height: 1.3;
-  font-size: 0.9rem;
+.bot-msg .time {
+  color: #9ca3af;
 }
 
-.bot-msg .markdown-content {
-  line-height: 1.4;
-}
-
-.bot-msg h1, .bot-msg h2, .bot-msg h3, .bot-msg h4, .bot-msg h5, .bot-msg h6 {
-  margin-top: 12px;
-  margin-bottom: 8px;
-  color: #2d3748;
-  font-size: 1rem;
-}
-
-.bot-msg code {
-  background: rgba(0, 0, 0, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.85em;
-}
-
-.bot-msg pre {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 12px;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin: 8px 0;
-}
-
-.bot-msg pre code {
-  background: none;
-  padding: 0;
-}
-
-.bot-msg ul, .bot-msg ol {
-  margin: 8px 0;
-  padding-left: 18px;
-}
-
-.bot-msg li {
-  margin-bottom: 4px;
-}
-
+/* === Input Area === */
 .input-box {
-  padding: 12px;
   display: flex;
   gap: 10px;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  padding: 14px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
 }
 
 .input-box input {
-  color: black;
   flex: 1;
   padding: 12px 16px;
-  border: 2px solid transparent;
   border-radius: 25px;
-  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
   outline: none;
-  background: rgba(21, 98, 197, 0.8);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
 .input-box input:focus {
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  transform: translateY(-1px);
-}
-
-.input-box input::placeholder {
-  color: #a0aec0;
-  font-style: italic;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 .input-box button {
-  padding: 12px 22px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
 .input-box button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.input-box button:active {
-  transform: translateY(0);
+  background: linear-gradient(135deg, #4338ca, #7e22ce);
+  transform: translateY(-1px);
 }
 
 .input-box button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
-.input-box button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.input-box button:hover::before {
-  left: 100%;
-}
-
-.bot-msg:has([class*="Typing"]) {
-  position: relative;
-}
-
-.bot-msg:has([class*="Typing"])::after {
-  content: '';
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #333;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
-  margin-left: 8px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* === Responsive === */
 @media (max-width: 768px) {
   .chat-container {
-    padding: 15px;
     max-width: 100%;
+    border-radius: 0;
   }
-
-  .chat-container h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-
+  
   .chat-box {
-    padding: 10px;
-    max-height: 50vh;
+    padding: 16px;
   }
-
+  
   .user-msg, .bot-msg {
-    max-width: 85%;
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-
-  .input-box {
-    flex-direction: row;
-    padding: 10px;
-  }
-
-  .input-box input {
-    font-size: 0.95rem;
-  }
-
-  .input-box button {
-    padding: 10px 20px;
-    width: auto;
+    max-width: 90%;
+    font-size: 0.9rem;
   }
 }
