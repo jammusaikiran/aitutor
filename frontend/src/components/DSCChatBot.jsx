@@ -8,15 +8,22 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  Paper,
-  Divider,
   CircularProgress,
   IconButton,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
-function ChatListItem({ chat, activeChat, setActiveChat, setNewChatMode, handleRenameChat, handleDeleteChat }) {
+function ChatListItem({
+  chat,
+  activeChat,
+  setActiveChat,
+  setNewChatMode,
+  handleRenameChat,
+  handleDeleteChat,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(chat.chat_name || "New Chat");
 
@@ -24,9 +31,7 @@ function ChatListItem({ chat, activeChat, setActiveChat, setNewChatMode, handleR
     <ListItem
       key={chat._id}
       selected={activeChat?._id === chat._id}
-      sx={{
-        "&:hover .actions": { opacity: 1 },
-      }}
+      className="group hover:bg-gray-200 rounded-md transition flex justify-between items-center px-2 py-1"
     >
       {isEditing ? (
         <TextField
@@ -48,6 +53,7 @@ function ChatListItem({ chat, activeChat, setActiveChat, setNewChatMode, handleR
       ) : (
         <ListItemText
           primary={chat.chat_name || "New Chat"}
+          className="cursor-pointer font-medium"
           onClick={() => {
             setActiveChat(chat);
             setNewChatMode(false);
@@ -55,24 +61,20 @@ function ChatListItem({ chat, activeChat, setActiveChat, setNewChatMode, handleR
         />
       )}
 
-      {/* Hover actions */}
-      <Box
-        className="actions"
-        sx={{ opacity: 0, transition: "0.2s", display: "flex" }}
-      >
-        <IconButton size="small" onClick={() => setIsEditing(true)} sx={{ ml: 1 }}>
+      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+        <IconButton size="small" onClick={() => setIsEditing(true)}>
           <EditIcon fontSize="small" />
         </IconButton>
-        <IconButton size="small" onClick={() => handleDeleteChat(chat._id)} sx={{ ml: 1 }}>
+        <IconButton size="small" onClick={() => handleDeleteChat(chat._id)}>
           <DeleteIcon fontSize="small" />
         </IconButton>
-      </Box>
+      </div>
     </ListItem>
   );
 }
 
 function App() {
-  const [userId] = useState("user-123"); // Replace with real user ID
+  const [userId] = useState("user-123");
   const [pdfFile, setPdfFile] = useState(null);
   const [chatSessions, setChatSessions] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
@@ -80,6 +82,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [pdfTraining, setPdfTraining] = useState(false);
   const [newChatMode, setNewChatMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -200,38 +203,34 @@ function App() {
     }
   };
 
-const handleDeleteChat = async (chatId) => {
-  try {
-    console.log("🗑 Deleting chat:", chatId); // Debug log
-    await axios.post("http://localhost:5001/chats/delete", { chatId });
-    setChatSessions(chatSessions.filter((c) => c._id !== chatId));
-    if (activeChat?._id === chatId) {
-      setActiveChat(null);
-      setNewChatMode(true);
+  const handleDeleteChat = async (chatId) => {
+    try {
+      await axios.post("http://localhost:5001/chats/delete", { chatId });
+      setChatSessions(chatSessions.filter((c) => c._id !== chatId));
+      if (activeChat?._id === chatId) {
+        setActiveChat(null);
+        setNewChatMode(true);
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error("❌ Delete error:", err.response?.data || err.message);
-  }
-};
-
-
+  };
 
   return (
-    <Box display="flex" height="100vh" sx={{ fontFamily: "Arial, sans-serif" }} overflow="hidden" marginTop="60px" position="fixed">
-      {/* Sidebar */}
-      <Paper sx={{ width: 300, overflowY: "auto", p: 2, bgcolor: "#f0f2f5" }}>
-        <Typography variant="h6">Chats</Typography>
+    <div className="flex h-screen pt-[60px] bg-gray-100 text-gray-900">
+      {/* Sidebar for large screens */}
+      <div className="hidden md:flex w-72 bg-white shadow-md p-4 flex-col">
+        <h2 className="text-lg font-bold mb-3">Chats</h2>
         <Button
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ mt: 1, mb: 2 }}
+          className="mb-3"
           onClick={handleNewChat}
         >
           New Chat
         </Button>
-        <Divider sx={{ mb: 2 }} />
-        <List>
+        <List className="overflow-y-auto flex-1 space-y-1">
           {chatSessions.map((chat) => (
             <ChatListItem
               key={chat._id}
@@ -244,28 +243,65 @@ const handleDeleteChat = async (chatId) => {
             />
           ))}
         </List>
-      </Paper>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div className="md:hidden">
+        <Button
+          onClick={() => setSidebarOpen(true)}
+          className="m-2"
+          variant="outlined"
+        >
+          <MenuIcon />
+        </Button>
+        {sidebarOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex">
+            <div className="w-72 bg-white p-4 flex flex-col">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="text-lg font-bold">Chats</h2>
+                <IconButton onClick={() => setSidebarOpen(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                className="mb-3"
+                onClick={handleNewChat}
+              >
+                New Chat
+              </Button>
+              <List className="overflow-y-auto flex-1 space-y-1">
+                {chatSessions.map((chat) => (
+                  <ChatListItem
+                    key={chat._id}
+                    chat={chat}
+                    activeChat={activeChat}
+                    setActiveChat={(c) => {
+                      setActiveChat(c);
+                      setSidebarOpen(false);
+                    }}
+                    setNewChatMode={setNewChatMode}
+                    handleRenameChat={handleRenameChat}
+                    handleDeleteChat={handleDeleteChat}
+                  />
+                ))}
+              </List>
+            </div>
+            <div
+              className="flex-1"
+              onClick={() => setSidebarOpen(false)}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Chat Area */}
-      <Box flex={1} display="flex" flexDirection="column" p={2}>
-        <Paper
-          sx={{
-            flex: 1,
-            p: 2,
-            mb: 2,
-            overflowY: "auto",
-            display: "flex",
-            flexDirection: "column",
-            bgcolor: "#e5ddd5",
-            minWidth: "130vh",
-            maxHeight: "70vh",
-            width: "100%",
-            height: "100%",
-          }}
-
-        >
+      <div className="flex-1 flex flex-col p-4">
+        <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-gray-100 p-4 rounded-lg shadow-inner">
           {newChatMode ? (
-            <Box textAlign="center" mt="auto" mb="auto">
+            <div className="flex flex-col items-center justify-center h-full text-center">
               <Typography variant="h6" gutterBottom>
                 Start a new chat by uploading a PDF
               </Typography>
@@ -273,87 +309,70 @@ const handleDeleteChat = async (chatId) => {
                 type="file"
                 accept="application/pdf"
                 onChange={(e) => setPdfFile(e.target.files[0])}
+                style={{
+                  display: "block",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
               />
               <Button
                 variant="contained"
                 color="primary"
+                className="mt-3"
+                disabled={pdfTraining || !pdfFile}
                 onClick={handlePdfUpload}
-                sx={{ mt: 2 }}
-                disabled={!pdfFile || pdfTraining}
+                style={{ background: "var(--color-blue-600)", color: "white" }}
               >
                 {pdfTraining ? (
                   <>
-                    <CircularProgress size={16} sx={{ mr: 1 }} />
+                    <CircularProgress size={16} className="mr-2" />
                     Training PDF...
                   </>
+                ) : pdfFile ? (
+                  "Train PDF"
                 ) : (
                   "Upload PDF"
                 )}
               </Button>
-            </Box>
+            </div>
           ) : activeChat?.messages?.length ? (
             activeChat.messages.map((msg, idx) => (
-              <Box key={idx} mb={2} display="flex" flexDirection="column">
-                <Box
-                  sx={{
-                    alignSelf: "flex-start",
-                    p: 1.5,
-                    bgcolor: "#dcf8c6",
-                    borderRadius: "15px 15px 0 15px",
-                    maxWidth: "60%",
-                  }}
-                >
-                  <Typography variant="body1">{msg.question}</Typography>
-                </Box>
-                <Box
-                  sx={{
-                    alignSelf: "flex-end",
-                    p: 1.5,
-                    bgcolor: "#fff",
-                    borderRadius: "15px 15px 15px 0",
-                    maxWidth: "60%",
-                    mt: 0.5,
-                  }}
-                >
-                  <Typography variant="body1">{msg.answer}</Typography>
-                </Box>
-              </Box>
+              <div key={idx} className="mb-4">
+                <div className="flex justify-end">
+                  <div className="bg-blue-500 text-white px-4 py-2 rounded-2xl max-w-md text-sm shadow">
+                    {msg.question}
+                  </div>
+                </div>
+
+                <div className="flex justify-start mt-1">
+                  <div className="bg-gray-200 text-gray-900 px-4 py-2 rounded-2xl max-w-md text-sm shadow">
+                    {msg.answer}
+                  </div>
+                </div>
+              </div>
             ))
           ) : (
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              align="center"
-              sx={{ mt: "auto", mb: "auto" }}
-            >
+            <p className="text-gray-500 text-center mt-auto mb-auto">
               No messages yet. Start chatting!
-            </Typography>
+            </p>
           )}
 
           {loading && (
-            <Box mb={2} alignSelf="flex-end">
-              <Box
-                sx={{
-                  p: 1.5,
-                  bgcolor: "#fff",
-                  borderRadius: "15px 15px 15px 0",
-                  maxWidth: "60%",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="body1" sx={{ mr: 1 }}>
-                  Typing...
-                </Typography>
+            <div className="flex justify-start mt-2">
+              <div className="bg-gray-200 text-gray-600 px-3 py-2 rounded-2xl shadow flex items-center gap-2 text-sm">
+                <span>Typing...</span>
                 <CircularProgress size={14} />
-              </Box>
-            </Box>
+              </div>
+            </div>
           )}
           <div ref={messagesEndRef} />
-        </Paper>
+        </div>
 
         {!newChatMode && activeChat && (
-          <Box display="flex">
+          <div className="flex mt-3">
             <TextField
               fullWidth
               variant="outlined"
@@ -367,14 +386,14 @@ const handleDeleteChat = async (chatId) => {
               color="primary"
               onClick={handleSendQuestion}
               disabled={loading || !activeChat}
-              sx={{ ml: 1 }}
+              className="ml-2"
             >
               Send
             </Button>
-          </Box>
+          </div>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }
 

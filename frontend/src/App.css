@@ -1,4 +1,6 @@
-/* Global layout fix */
+@import "tailwindcss";
+
+Global layout fix
 body, html, #root {
   margin: 0;
   padding: 0;
