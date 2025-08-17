@@ -7,4 +7,6 @@ pinecone
 langchain-huggingface
 google-generativeai
 gunicorn
+sentence-transformers
+
 
