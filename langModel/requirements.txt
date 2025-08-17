@@ -3,7 +3,8 @@ flask-cors
 python-dotenv
 pymongo
 pymupdf
-pinecone-client
+pinecone
 langchain-huggingface
 google-generativeai
 gunicorn
+
