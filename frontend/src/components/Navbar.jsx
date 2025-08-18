@@ -38,6 +38,8 @@ const Navbar = () => {
     };
   }, []);
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const handleChatBot = () => {
     if (!isLoggedIn) {
       alert('Please login first to access the chatbot');
@@ -45,6 +47,7 @@ const Navbar = () => {
     } else {
       navigate('/chat');
     }
+    closeMobileMenu();
   };
 
   const handleAuthAction = () => {
@@ -55,6 +58,7 @@ const Navbar = () => {
     setIsAdmin(false);
     navigate('/login');
     window.dispatchEvent(new Event('authChange'));
+    closeMobileMenu();
   };
 
   const getInitials = (email) => email?.slice(0, 2).toUpperCase();
@@ -131,7 +135,10 @@ const Navbar = () => {
 
             {isAdmin && (
               <button
-                onClick={() => navigate('/admin')}
+                onClick={() => {
+                  navigate('/admin');
+                  closeMobileMenu();
+                }}
                 className="flex items-center px-4 py-2 mb-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition"
               >
                 👥 Manage Users

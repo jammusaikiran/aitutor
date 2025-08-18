@@ -6,6 +6,7 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user"); // ✅ added role
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -20,6 +21,7 @@ function Register() {
         name,
         email,
         password,
+        role, // ✅ send role to backend
       });
       setMessage("Registration successful! You can now login.");
       setMessageType("success");
@@ -28,6 +30,7 @@ function Register() {
       setName("");
       setEmail("");
       setPassword("");
+      setRole("user");
 
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
@@ -103,6 +106,16 @@ function Register() {
             required
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
           />
+
+          {/* ✅ Role selection */}
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
 
           {password && (
             <div>
