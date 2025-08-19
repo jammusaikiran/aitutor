@@ -61,7 +61,7 @@ function ChatListItem({
         />
       )}
 
-      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition"> 
         <IconButton size="small" onClick={() => setIsEditing(true)}>
           <EditIcon fontSize="small" />
         </IconButton>
@@ -85,9 +85,10 @@ function App() {
   const [newChatMode, setNewChatMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
-  const URL=import.meta.env.FLASK_URL
+  const URL=import.meta.env.VITE_FLASK_URL
 
 useEffect(() => {
+  
   if (userId) {
     fetchChats();
   }
@@ -144,6 +145,7 @@ useEffect(() => {
 
 
   const sortChats = (chats) => {
+    if (!Array.isArray(chats)) return []; 
     return chats.sort((a, b) => {
       const aTime = a.messages?.length
         ? new Date(a.messages[a.messages.length - 1].timestamp)

@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os, uuid
-import fitz  # PyMuPDF
+# import fitz  
 from pinecone import Pinecone
 import google.generativeai as genai
 from pymongo import MongoClient
 from datetime import datetime
-
+import fitz
+print(fitz.__file__)   # should point to .../venv/Lib/site-packages/fitz/__init__.py
+# print(dir(fitz))  
 # ------------------ Load env ------------------
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -33,14 +35,16 @@ app = Flask(__name__)
 CORS(
     app,
     resources={r"/*": {"origins": [
-        " http://localhost:5173",
+        "http://localhost:5173",
         "https://chattutorai.netlify.app"
     ]}}
 )
 
 # ------------------ Helpers ------------------
+
 def extract_chunks_from_pdf(file, chunk_size=500):
-    pdf_document = fitz.open(stream=file.read(), filetype="pdf")
+    file_bytes = file.read()  # read once
+    pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
     for page in pdf_document:
         words = page.get_text().split()
         for i in range(0, len(words), chunk_size):
@@ -86,6 +90,7 @@ def train():
 
         return jsonify({"status": "success", "chatId": chat_id, "chatName": chat_name, "chunks": len(chunks)})
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)}), 500
 
 
@@ -165,6 +170,5 @@ def welcome():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render sets PORT env var
-    app.run(host="0.0.0.0", port=port)
-
+    # port = int(os.environ.get("PORT", 5000))  # Render sets PORT env var
+    app.run(port=5001,debug=True)
