@@ -159,6 +159,10 @@ def delete_chat():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/welcome",methods=["GET"])
+def welcome():
+    return jsonify({"name":"flask"})
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
