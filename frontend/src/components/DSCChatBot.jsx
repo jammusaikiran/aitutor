@@ -74,7 +74,8 @@ function ChatListItem({
 }
 
 function App() {
-  const [userId] = useState("user-123");
+  // const [userId] = useState("user-123");
+  const [userId, setUserId] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [chatSessions, setChatSessions] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
@@ -84,31 +85,63 @@ function App() {
   const [newChatMode, setNewChatMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
+  const URL=import.meta.env.FLASK_URL
 
-  useEffect(() => {
+useEffect(() => {
+  if (userId) {
     fetchChats();
-  }, []);
+  }
+}, [userId]);
+
 
   useEffect(() => {
     scrollToBottom();
   }, [activeChat, loading]);
 
+ useEffect(() => {
+  const storedUser = localStorage.getItem("userInfo");
+  if (storedUser) {
+    try {
+      const parsed = JSON.parse(storedUser);
+      setUserId(parsed.email); // or parsed._id if your backend provides it
+    } catch (e) {
+      console.error("Failed to parse userInfo", e);
+    }
+  }
+}, []);
+
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // const fetchChats = async () => {
+  //   try {
+  //     console.log(userId);
+  //     const res = await axios.get(`http://localhost:5001/chats/${userId}`);
+  //     const sorted = sortChats(res.data);
+  //     setChatSessions(sorted);
+  //     if (sorted.length > 0 && !activeChat) {
+  //       setActiveChat(sorted[0]);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
   const fetchChats = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5001/chats/${userId}`);
-      const sorted = sortChats(res.data);
-      setChatSessions(sorted);
-      if (sorted.length > 0 && !activeChat) {
-        setActiveChat(sorted[0]);
-      }
-    } catch (err) {
-      console.error(err);
+  try {
+    if (!userId) return;
+    const res = await axios.get(`${URL}/chats/${userId}`);
+    const sorted = sortChats(res.data);
+    setChatSessions(sorted);
+    if (sorted.length > 0 && !activeChat) {
+      setActiveChat(sorted[0]);
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const sortChats = (chats) => {
     return chats.sort((a, b) => {
@@ -131,7 +164,7 @@ function App() {
 
     try {
       setPdfTraining(true);
-      const res = await axios.post("http://localhost:5001/train", formData);
+      const res = await axios.post(`${URL}/train`, formData);
       const newChat = res.data.chat;
 
       if (newChat) {
@@ -162,7 +195,7 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5001/query", {
+      const res = await axios.post(`${URL}/query`, {
         user_id: userId,
         chat_id: activeChat._id,
         question,
@@ -193,7 +226,7 @@ function App() {
 
   const handleRenameChat = async (chatId, newName) => {
     try {
-      await axios.post("http://localhost:5001/chats/rename", {
+      await axios.post(`${URL}/chats/rename`, {
         chatId,
         newName,
       });
@@ -205,7 +238,7 @@ function App() {
 
   const handleDeleteChat = async (chatId) => {
     try {
-      await axios.post("http://localhost:5001/chats/delete", { chatId });
+      await axios.post(`${URL}/chats/delete`, { chatId });
       setChatSessions(chatSessions.filter((c) => c._id !== chatId));
       if (activeChat?._id === chatId) {
         setActiveChat(null);

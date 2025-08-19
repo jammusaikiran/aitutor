@@ -8,32 +8,60 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // const handleLogin = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.post(
+  //       import.meta.env.VITE_API_URL + "/api/auth/login",
+  //       { email, password }
+  //     );
+  //     localStorage.setItem("token", res.data.token);
+  //     if (res.data.user) {
+  //       localStorage.setItem(
+  //         "userInfo",
+  //         JSON.stringify({
+  //           name: res.data.user.name,
+  //           email: res.data.user.email,
+  //           role: res.data.user.role,
+  //         })
+  //       );
+  //     }
+  //     window.dispatchEvent(new Event("authChange"));
+  //     navigate(res.data.role === "admin" ? "/" : "/");
+  //   } catch (err) {
+  //     alert("Login failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.post(
-        import.meta.env.VITE_API_URL + "/api/auth/login",
-        { email, password }
-      );
-      localStorage.setItem("token", res.data.token);
-      if (res.data.user) {
-        localStorage.setItem(
-          "userInfo",
-          JSON.stringify({
-            name: res.data.user.name,
-            email: res.data.user.email,
-            role: res.data.user.role,
-          })
-        );
-      }
-      window.dispatchEvent(new Event("authChange"));
-      navigate(res.data.role === "admin" ? "/" : "/");
-    } catch (err) {
-      alert("Login failed");
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      import.meta.env.VITE_API_URL + "/api/auth/login",
+      { email, password }
+    );
+
+    localStorage.setItem("token", res.data.token);
+
+    if (res.data.user) {
+      // ✅ store userInfo only
+      localStorage.setItem("userInfo", JSON.stringify(res.data.user));
     }
-  };
+
+    // ✅ remove old "user" key if exists
+    localStorage.removeItem("user");
+
+    window.dispatchEvent(new Event("authChange"));
+    navigate("/");
+  } catch (err) {
+    alert("Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleLogin();
