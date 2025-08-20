@@ -61,7 +61,7 @@ function ChatListItem({
         />
       )}
 
-      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition"> 
+      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
         <IconButton size="small" onClick={() => setIsEditing(true)}>
           <EditIcon fontSize="small" />
         </IconButton>
@@ -74,7 +74,6 @@ function ChatListItem({
 }
 
 function App() {
-  // const [userId] = useState("user-123");
   const [userId, setUserId] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [chatSessions, setChatSessions] = useState([]);
@@ -84,68 +83,51 @@ function App() {
   const [pdfTraining, setPdfTraining] = useState(false);
   const [newChatMode, setNewChatMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatsLoading, setChatsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const URL=import.meta.env.VITE_FLASK_URL
+  const URL = import.meta.env.VITE_FLASK_URL;
 
-useEffect(() => {
-  
-  if (userId) {
-    fetchChats();
-  }
-}, [userId]);
-
+  useEffect(() => {
+    if (userId) fetchChats();
+  }, [userId]);
 
   useEffect(() => {
     scrollToBottom();
   }, [activeChat, loading]);
 
- useEffect(() => {
-  const storedUser = localStorage.getItem("userInfo");
-  if (storedUser) {
-    try {
-      const parsed = JSON.parse(storedUser);
-      setUserId(parsed.email); // or parsed._id if your backend provides it
-    } catch (e) {
-      console.error("Failed to parse userInfo", e);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userInfo");
+    if (storedUser) {
+      try {
+        const parsed = JSON.parse(storedUser);
+        setUserId(parsed.email);
+      } catch (e) {
+        console.error("Failed to parse userInfo", e);
+      }
     }
-  }
-}, []);
-
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // const fetchChats = async () => {
-  //   try {
-  //     console.log(userId);
-  //     const res = await axios.get(`http://localhost:5001/chats/${userId}`);
-  //     const sorted = sortChats(res.data);
-  //     setChatSessions(sorted);
-  //     if (sorted.length > 0 && !activeChat) {
-  //       setActiveChat(sorted[0]);
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
   const fetchChats = async () => {
-  try {
     if (!userId) return;
-    const res = await axios.get(`${URL}/chats/${userId}`);
-    const sorted = sortChats(res.data);
-    setChatSessions(sorted);
-    if (sorted.length > 0 && !activeChat) {
-      setActiveChat(sorted[0]);
+    try {
+      setChatsLoading(true);
+      const res = await axios.get(`${URL}/chats/${userId}`);
+      const sorted = sortChats(res.data);
+      setChatSessions(sorted);
+      if (sorted.length > 0 && !activeChat) setActiveChat(sorted[0]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setChatsLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
+  };
 
   const sortChats = (chats) => {
-    if (!Array.isArray(chats)) return []; 
+    if (!Array.isArray(chats)) return [];
     return chats.sort((a, b) => {
       const aTime = a.messages?.length
         ? new Date(a.messages[a.messages.length - 1].timestamp)
@@ -173,9 +155,7 @@ useEffect(() => {
         const updated = sortChats([newChat, ...chatSessions]);
         setChatSessions(updated);
         setActiveChat(newChat);
-      } else {
-        fetchChats();
-      }
+      } else fetchChats();
 
       setPdfFile(null);
       setNewChatMode(false);
@@ -212,10 +192,11 @@ useEffect(() => {
       };
 
       setActiveChat(updatedChat);
-      const updatedSessions = chatSessions.map((c) =>
-        c._id === activeChat._id ? updatedChat : c
+      setChatSessions(
+        sortChats(
+          chatSessions.map((c) => (c._id === activeChat._id ? updatedChat : c))
+        )
       );
-      setChatSessions(sortChats(updatedSessions));
 
       setQuestion("");
       scrollToBottom();
@@ -228,10 +209,7 @@ useEffect(() => {
 
   const handleRenameChat = async (chatId, newName) => {
     try {
-      await axios.post(`${URL}/chats/rename`, {
-        chatId,
-        newName,
-      });
+      await axios.post(`${URL}/chats/rename`, { chatId, newName });
       fetchChats();
     } catch (err) {
       console.error(err);
@@ -265,19 +243,26 @@ useEffect(() => {
         >
           New Chat
         </Button>
-        <List className="overflow-y-auto flex-1 space-y-1">
-          {chatSessions.map((chat) => (
-            <ChatListItem
-              key={chat._id}
-              chat={chat}
-              activeChat={activeChat}
-              setActiveChat={setActiveChat}
-              setNewChatMode={setNewChatMode}
-              handleRenameChat={handleRenameChat}
-              handleDeleteChat={handleDeleteChat}
-            />
-          ))}
-        </List>
+
+        {chatsLoading ? (
+          <div className="flex justify-center items-center flex-1">
+            <CircularProgress />
+          </div>
+        ) : (
+          <List className="overflow-y-auto flex-1 space-y-1">
+            {chatSessions.map((chat) => (
+              <ChatListItem
+                key={chat._id}
+                chat={chat}
+                activeChat={activeChat}
+                setActiveChat={setActiveChat}
+                setNewChatMode={setNewChatMode}
+                handleRenameChat={handleRenameChat}
+                handleDeleteChat={handleDeleteChat}
+              />
+            ))}
+          </List>
+        )}
       </div>
 
       {/* Mobile Sidebar */}
@@ -290,8 +275,8 @@ useEffect(() => {
           <MenuIcon />
         </Button>
         {sidebarOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex">
-            <div className="w-72 bg-white p-4 flex flex-col">
+          <div className="fixed inset-0 z-50 flex">
+            <div className="w-72 bg-white p-4 flex flex-col shadow-lg">
               <div className="flex justify-between items-center mb-3">
                 <h2 className="text-lg font-bold">Chats</h2>
                 <IconButton onClick={() => setSidebarOpen(false)}>
@@ -307,25 +292,33 @@ useEffect(() => {
               >
                 New Chat
               </Button>
-              <List className="overflow-y-auto flex-1 space-y-1">
-                {chatSessions.map((chat) => (
-                  <ChatListItem
-                    key={chat._id}
-                    chat={chat}
-                    activeChat={activeChat}
-                    setActiveChat={(c) => {
-                      setActiveChat(c);
-                      setSidebarOpen(false);
-                    }}
-                    setNewChatMode={setNewChatMode}
-                    handleRenameChat={handleRenameChat}
-                    handleDeleteChat={handleDeleteChat}
-                  />
-                ))}
-              </List>
+
+              {/* Spinner overlay for mobile */}
+              {chatsLoading ? (
+                <div className="flex justify-center items-center flex-1 h-full">
+                  <CircularProgress />
+                </div>
+              ) : (
+                <List className="overflow-y-auto flex-1 space-y-1">
+                  {chatSessions.map((chat) => (
+                    <ChatListItem
+                      key={chat._id}
+                      chat={chat}
+                      activeChat={activeChat}
+                      setActiveChat={(c) => {
+                        setActiveChat(c);
+                        setSidebarOpen(false);
+                      }}
+                      setNewChatMode={setNewChatMode}
+                      handleRenameChat={handleRenameChat}
+                      handleDeleteChat={handleDeleteChat}
+                    />
+                  ))}
+                </List>
+              )}
             </div>
             <div
-              className="flex-1"
+              className="flex-1 bg-black bg-opacity-30"
               onClick={() => setSidebarOpen(false)}
             />
           </div>

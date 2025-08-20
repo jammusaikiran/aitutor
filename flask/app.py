@@ -8,7 +8,7 @@ import google.generativeai as genai
 from pymongo import MongoClient
 from datetime import datetime
 import fitz
-print(fitz.__file__)   # should point to .../venv/Lib/site-packages/fitz/__init__.py
+# print(fitz.__file__)   # should point to .../venv/Lib/site-packages/fitz/__init__.py
 # print(dir(fitz))  
 # ------------------ Load env ------------------
 load_dotenv()
