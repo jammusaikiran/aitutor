@@ -23,7 +23,7 @@ const Home = () => {
           </button>
           <button
             onClick={() => navigate("/dsc-chat")}
-            className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg shadow-md hover:bg-gray-300 transition transform hover:scale-105"
+            className="bg-green-500 text-gray-800 px-6 py-3 rounded-lg shadow-md hover:bg-gray-300 transition transform hover:scale-105"
           >
             📄 DS ChatBot
           </button>
